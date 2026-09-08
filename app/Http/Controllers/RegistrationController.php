@@ -15,7 +15,7 @@ class RegistrationController extends Controller
     }
     public function show(Registration $registration)
     {
-        return view('auth.registtration_detail', ['registration' => $registration]);
+        return view('auth.registration_detail', ['registration' => $registration]);
     }
     public function create()
     {
@@ -54,5 +54,12 @@ class RegistrationController extends Controller
         $registration->update($request->only('name', 'email', 'password'));
 
         return redirect()->route('tasks.index')->with('success', 'Profil erfolgreich aktualisiert!');
+    }
+    public function destroy(Registration $registration)
+    {
+        
+        $registration->delete();
+
+        return redirect()->route('welcome')->with('success', 'Profil erfolgreich gelöscht!');
     }
 }
