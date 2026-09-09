@@ -1,14 +1,12 @@
 <x-layout title="Task anlegen">
 
     <h1>Neue Aufgabe anlegen</h1>
-    <form action="/tasks" method="POST">
+    <form action="/tasks/create" method="POST">
         @csrf
         <div class="mb-6">
             <label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Titel</label>
             <input type="text" id="title" name="title" value="{{ old('title') }}" 
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg 
-            focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 
-            dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            class="input input-secondary">
             @error('title')
                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
             @enderror
@@ -16,7 +14,7 @@
 
         <div class="mb-6">
             <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Beschreibung</label>
-            <textarea id="description" name="description" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">{{ old('description') }}</textarea>
+            <textarea id="description" name="description" rows="4" class="input input-secondary">{{ old('description') }}</textarea>
             @error('description')
                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
             @enderror

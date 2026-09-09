@@ -11,17 +11,17 @@
                 <legend>E-Mail</legend>
                 <input id="email" type="email" name="email" value="{{ old('email') }}"
                     class="input w-full {{ $errors->has('email') ? 'input-error' : '' }}">
-                    @error('email') {{ $message }} @enderror
+                      <x-error name="email" /> 
             </fieldset>
 
             <fieldset class="fieldset">
                 <legend>Passwort</legend>
                 <input id="password" type="password" name="password"
                     class="input w-full {{ $errors->has('passowrd') ? 'input-error' : '' }}">
-                    @error('password') {{ $message }} @enderror
+                       <x-error name="password" /> 
             </fieldset>
 
-            <button type="submit" class="btn btn-primary w-full">
+            <button type="submit" class="btn btn-soft btn-accent">
                 Einloggen
             </button>
         </form>

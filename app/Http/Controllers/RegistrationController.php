@@ -9,57 +9,27 @@ use Illuminate\Http\Request;
 
 class RegistrationController extends Controller
 {
-    public function index()
-    {
-        return view('auth.register');
-    }
-    public function show(Registration $registration)
-    {
-        return view('auth.registration_detail', ['registration' => $registration]);
-    }
-    public function create()
+  
+    public function create() // ein neuer eintrag wird erstallt
     {
         return view('auth.register');
     }
 
-    public function store(Request $request)
-    {
+    public function store(Request $request) //wir wollen unsere daten speichern, stehen in $request
+    {    // wir wollen die abgegebenen daten validieren
         $validated = $request->validate([
             'name'      => ['required', 'string', 'max:50'],
             'email'     => ['required', 'email', 'max:100', 'unique:users'],
             'password'  => ['required', 'string', 'min:8', 'confirmed'] //confirmed sucht automatisch nach einem feld mit dem namen "password_confirmation"
         ]);
 
-        unset($validated['password_confirmation']); // Unnötig?
+        // Wir legen unseren User in der Datenbank an. , praktisch weil alles in Variable
         $user = User::create($validated);
-        
+        //User wird eingeloggt
         Auth::login($user);
 
         $request->session()->regenerate(); // Sicherheitsmaßnahme
-
+        //wir werden auf die nächste seite geleitet
         return redirect()->route('tasks.index')->with('success', 'Willkommen zur TaskApp, ' . $user->name . '!');
-    }
-    public function edit(Registration $registration)
-    {
-        return view('auth.registration_edit', ['registration' => $registration]);
-    }
-    public function update(Request $request, Registration $registration)
-    {
-        $request->validate([
-            'name'      => ['required', 'string', 'max:50'],
-            'email'     => ['required', 'email', 'max:100', 'unique:users,email,' . $registration->id],
-            'password'  => ['nullable', 'string', 'min:8', 'confirmed']
-        ]);
-
-        $registration->update($request->only('name', 'email', 'password'));
-
-        return redirect()->route('tasks.index')->with('success', 'Profil erfolgreich aktualisiert!');
-    }
-    public function destroy(Registration $registration)
-    {
-        
-        $registration->delete();
-
-        return redirect()->route('welcome')->with('success', 'Profil erfolgreich gelöscht!');
     }
 }
