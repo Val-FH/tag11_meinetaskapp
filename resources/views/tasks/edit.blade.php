@@ -1,22 +1,32 @@
-<x-layout title="Task ändern">
+<x-layout title="Aufgabe bearbeiten">
 
-    <h1>Aufgabe ändern</h1>
-    <form action="/tasks/edit/{{ $task->user_id }}" method="POST">
-        @csrf
-        @method('PUT')
+    <div class="mx-auto max-w-xl">
+        <h1> Neue Aufgabe! </h1>
 
-        <div class="mb-6">
-            <label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Titel</label>
-            <input type="text" id="title" name="title" value="{{ old('title',$task->title) }}" 
-            class="input input-secondary">
-            <x-error name="title" />
-        </div>
+        <form action="{{ route('tasks.update', $task) }}" method="POST"
+            class="mt-6 space-y-4 rounded-box border border-base-300 bg-base-100 p-6 shadow-sm">
+            @csrf
+            @method('PUT')
 
-        <div class="mb-6">
-            <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Beschreibung</label>
-            <textarea id="description" name="description" rows="4" class="input input-secondary">{{ old('description', $task->description) }}</textarea>
-          <x-error name="description" />
-        </div>
+            <fieldset class="fieldset">
+                <legend>Titel</legend>
+                <input id="title" type="text" name="title" value="{{ old('title', $task->title) }}"
+                    class="input w-full {{ $errors->has('title') ? 'input-error' : '' }}">
+                    <x-error name="title" />
+            </fieldset>
 
-        <button type="submit" class="btn btn-soft btn-primary">Aufgabe ändern</button>
+            <fieldset class="fieldset">
+                <legend>Beschreibung</legend>
+                <textarea id="description" name="description" rows="4"
+                    class="textarea w-full {{ $errors->has('description') ? 'textarea-error' : '' }}">{{ old('description', $task->description) }}</textarea>
+              <x-error name="description" />
+            </fieldset>
+
+            <button type="submit" class="btn btn-primary">Aufgabe ändern</button>
+        </form>
+    </div>
 </x-layout>
+     
+     
+     
+    

@@ -9,10 +9,12 @@
                     {{ $task->title }}
                 </a>
                 <p class="text-sm opacity-70">
-                    finished {{ $task->updated_at->diffForHumans() }}
+                    von {{ $task->user?->name ?? 'der Klasse' }} {{ $task->done ? 'erledigt' : 'in Bearbeitung' }} {{ $task->updated_at->diffForHumans() }}
                 </p>
             </div>
-            <span class="badge badge-success font-bold"> Done </span>
+            <span class="badge {{ $task->done ? 'badge-success' : 'badge-ghost' }} font-bold">
+                {{ $task->done ? 'Abgeschlossen' : 'Offen' }}
+            </span>
         </div>
 
         <p class="mt-1">{{ $task->description }}</p>

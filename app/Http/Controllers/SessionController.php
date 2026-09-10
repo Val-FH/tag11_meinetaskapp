@@ -32,10 +32,9 @@ class SessionController extends Controller
         // wir leiten weiter weil der log in geklappt hat
         return redirect()->route('tasks.index');
     }
-
-    public function destroy(Request $request)
+  public function destroy(Request $request)
     {
-        Auth::logout();
+        auth()->logout();
         $request->session()->invalidate(); // Session Informationen löschen
         $request->session()->regenerateToken();
 

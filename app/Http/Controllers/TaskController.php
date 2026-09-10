@@ -8,24 +8,45 @@ use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-       // if(! Auth::check()) {
-       //     return redirect()->route('login'); // Redirect für nicht authorisierte user
-       // }
+        // if(! auth()->check()) {
+        //     return redirect()->route('login'); // Redirect für nicht authorisierte user
+        // }
 
-        $tasks = Task::latest()->paginate(5);  //letzten 5 task anzeigen
+        //dd zur anzeige des kompletten sql strings
+    //     dd(Task::latest()
+    //     ->when($request->filled('q'), function ($query) use($request){
+    //         $term = '%' . $request->input('q') . '%';
+
+    //    $query->where(function ($q) use ($term) {
+    //    $q->where('title', 'like', $term)->orWhere('description', 'like', $term);
+    //    });
+    //     })->toRawSql());
+
+        $tasks = Task::latest()
+        ->when($request->filled('q'), function ($query) use($request){
+           $query->search($request->input('q'));
+        })
+        ->when($request->input('status') === 'open', function($query){
+            $query->where('done', false);
+        })
+        ->when($request->input('status') === 'done', function($query){
+            $query->where('done', true);
+        })
+        ->paginate(5)->withQueryString();
         return view('tasks.index', ['tasks' => $tasks]); //pfadstrukturen mit . nicht mit /
     }
 
     public function show(Task $task)
     {
-    //    if(! Auth::check()) {
-    //        return redirect()->route('login'); // Redirect für nicht authorisierte user
-    //    }
+        // if(! auth()->check()) {
+        //     return redirect()->route('login'); // Redirect für nicht authorisierte user
+        // }
         
         return view('tasks.show', compact('task'));  //return view('tasks.show', ['task' => $task]); 
     }
+
     public function create()
     {
         return view('tasks.create');
@@ -33,7 +54,7 @@ class TaskController extends Controller
 
     public function store(Request $request)
     {
-     $validated = $request->validate([
+        $validated = $request->validate([
             'title'         => ['required', 'string', 'max:50'],
             'description'   => ['required', 'string', 'max:500'],
         ]);
@@ -42,29 +63,35 @@ class TaskController extends Controller
 
         Task::create($validated);
 
-        return redirect()->route('dashboard')->with('success', 'Task created successfully.');
-    } 
-   public function edit(Task $task)
+        return redirect()->route('dashboard')->with('success', 'Aufgabe erfolgreich angelegt');
+    }
+
+    public function edit(Task $task)
     {
-       return view('tasks.edit' , compact('task'));
+        // muss in edit, update, destroy und toggle, da sonst gefälschte anfragen durchgehen würden
+        abort_if($task->user_id !== auth()->id(), 404);
+        return view('tasks.edit', compact('task'));
     }
 
     public function update(Request $request, Task $task)
     {
-       $validated = $request->validate([
-            'title'         => ['required', 'string', 'max:50'],
-            'description'   => ['required', 'string', 'max:500'],
+        abort_if($task->user_id !== auth()->id(), 404);
+        $validated = $request->validate([
+            'title' => ['required', 'string', 'max:50'],
+            'description' => ['required', 'string', 'max:500']
         ]);
-         $validated['user_id'] = auth()->id(); // Der aktuell eingeloggte User
-        $validated['done'] = false;
 
-        $task->update($request->only(['title', 'description']));
-        return redirect('tasks.show')->with('success', 'Deine Aufgaben wurden geändert');
+        $task->update($validated);
+
+        return redirect()->route('tasks.show', $task)->with('success', 'Aufgabe aktualisiert');
     }
+
     public function destroy(Task $task)
     {
+        abort_if($task->user_id !== auth()->id(), 404);
         $task->delete();
-        return redirect('tasks.show')->with('success','Deine Aufgabe wurde gelöscht');
+
+        return redirect()->route('dashboard')->with('success', 'Aufgabe gelöscht');
     }
 
 
@@ -72,7 +99,7 @@ class TaskController extends Controller
     public function toggle(Task $task)
     {
         //nur der Ersteller darf seine Aufgabe umschalten
-        // abort_if($task->user_id !== auth()->id(), 403);
+        abort_if($task->user_id !== auth()->id(), 403);
 
         $task->done = !$task->done;
         $task->save();
@@ -82,5 +109,4 @@ class TaskController extends Controller
         return back()->with('success', $message);
 
     }
-
 }

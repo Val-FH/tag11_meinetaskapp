@@ -18,7 +18,7 @@ Route::middleware('auth')->group(function() {
     // Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
     // Route::get('/tasks/{task}', [TaskController::class,'show'])->whereNumber('task')->name('tasks.show');
     // Route::get('/tasks/create', [TaskController::class, 'create'])->name('tasks.create');
-     Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
+    // Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
     // Route::get('/tasks/{task}/edit', [TaskController::class, 'edit'])->name('tasks.edit');
     // Route::put('/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
     // Route::delete('tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
@@ -26,14 +26,9 @@ Route::middleware('auth')->group(function() {
     Route::resource('tasks', TaskController::class);
     
     Route::post('/logout', [SessionController::class, 'destroy'])->name('logout');
-    //Route::post('/logout', [SessionController::class, 'destroy'])->name('logout');
-    //Route::delete('/logout',[SessionController::class, 'destroy']); 
-    // gleiche wie  /session nur logout ist leichter zu merken
     //Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
-
-
 
 
 Route::middleware('guest')->group(function() {
@@ -45,5 +40,3 @@ Route::middleware('guest')->group(function() {
     Route::get('/login', [SessionController::class, 'create'])->name('login');
     Route::post('/login', [SessionController::class, 'store']);
 });
-
-

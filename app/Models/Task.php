@@ -12,4 +12,16 @@ class Task extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    //scopeSearch im Model -> search()
+    public function scopeSearch($query, $term)
+    {
+        $term = '%' . $term . '%';
+
+        return $query->where(function ($q) use ($term) {
+            $q->where('title', 'like', $term)
+            ->orWhere('description', 'like', $term);
+        });
+    }
 }
+
