@@ -69,7 +69,9 @@ class TaskController extends Controller
     public function edit(Task $task)
     {
         // muss in edit, update, destroy und toggle, da sonst gefälschte anfragen durchgehen würden
+       // weg zu verhindern das andere user an meine aufgaben kommen.
         abort_if($task->user_id !== auth()->id(), 404);
+        //Gate::can('task-view');
         return view('tasks.edit', compact('task'));
     }
 

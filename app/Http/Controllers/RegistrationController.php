@@ -8,10 +8,10 @@ use App\Models\User;
 use Illuminate\Http\Request;
 
 class RegistrationController extends Controller
-{
+{  // Hier organisieren wir unsere Registrierungen
   
     public function create() // ein neuer eintrag wird erstallt
-    {
+    {   //unter resources views im ordner auth liegt die datei register
         return view('auth.register');
     }
 
@@ -25,11 +25,11 @@ class RegistrationController extends Controller
 
         // Wir legen unseren User in der Datenbank an. , praktisch weil alles in Variable
         $user = User::create($validated);
-        //User wird eingeloggt
+        //User wird eingeloggt, der nun neue user wird in das eingeloggt erhoben. 
         Auth::login($user);
-
+        // wir bekommen eine neue sessions id weil wir nun eingeloggt sind. Das ist sicherer weil dann kann uns keiner die session klauen
         $request->session()->regenerate(); // Sicherheitsmaßnahme
-        //wir werden auf die nächste seite geleitet
+        //wir werden auf die nächste seite geleitet, mit willkommensnachricht
         return redirect()->route('tasks.index')->with('success', 'Willkommen zur TaskApp, ' . $user->name . '!');
     }
 }

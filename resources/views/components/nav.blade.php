@@ -24,7 +24,8 @@
 
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
-                    @method('DELETE')
+    
+    
                     <button type="submit" class="btn btn-soft btn-primary">
                         Log Out
                     </button>
