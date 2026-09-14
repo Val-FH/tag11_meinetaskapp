@@ -43,6 +43,12 @@ Route::middleware('guest')->group(function() {
     Route::post('/login', [SessionController::class, 'store']);
 });
 
+//Admin seiten spaß
+Route::get('/admin', function () {
+    // variante Gate::authorized('view-admin')
+    return view('admin');
+})->name('admin')->can('view-admin');
+
 //datenbank tests
 Route::get('/dbtest', function(){
 // wir machen eine datenbank abfrage um daten zu holen. Durch JSON wird der datensatz angezeigt
@@ -68,7 +74,7 @@ Route::get('/dbtest', function(){
 // $users = User::where('id' ,1)->get();
 //return dump($users);
 
-// $users = User::get();
-// $users_id = $users->pull('id')->toArray();
-// $id = Arr::random($users:id); zufällige id kriegen
+ $users = User::get();
+ $users_id = $users->pull('id')->toArray();
+ $id = Arr::random($users_id); // zufällige id kriegen
 });

@@ -1,4 +1,4 @@
-<x-layout title="Willkommen">
+<x-layout title="Welcome">
 
     <section class="mb-8 text-center">
         <h1 class="text-3xl font-bold"> Willkommen zur fantastischen TaskApp </h1>

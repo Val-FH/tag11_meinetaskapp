@@ -17,8 +17,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        //funktion um user anzzlegen 10 stück
-        // User::factory(10)->create();
+        //funktion um user anzulegen 10 stück
+         User::factory(10)->create();
+         $user_ids =$users->pluck("id")->toArray();
 
         // User::factory()->create([
         //     'name' => 'Test User',
@@ -26,14 +27,14 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $tasks = [
-            ['title' => 'IT Basics', 'description' => 'Grundlegende Programmierung', 'done' => true],
-            ['title' => 'Laravel Basics', 'description' => 'Routing und Controller in Laravel', 'done' => true],
-            ['title' => 'Java Basics', 'description' => 'Grundlegende Java-Konzepte', 'done' => true],
-            ['title' => 'It Professionels', 'description' => 'Vertiefung Programmierung allgemein', 'done' => true],
-            ['title' => 'Laravel Professionels', 'description' => 'Vertiefung Laravel', 'done' => true],
-            ['title' => 'Java Professionels', 'description' => 'Vertiefung Java', 'done' => true],
+            ['title' => 'IT Basics', 'description' => 'Grundlegende Programmierung', 'done' => true,'user_id' => Arr::random($user_ids)],
+            ['title' => 'Laravel Basics', 'description' => 'Routing und Controller in Laravel', 'done' => true, 'user_id' => Arr::random($user_ids)],
+            ['title' => 'Java Basics', 'description' => 'Grundlegende Java-Konzepte', 'done' => true, 'user_id' => Arr::random($user_ids)],
+            ['title' => 'It Professionels', 'description' => 'Vertiefung Programmierung allgemein', 'done' => true, 'user_id' => Arr::random($user_ids)],
+            ['title' => 'Laravel Professionels', 'description' => 'Vertiefung Laravel', 'done' => true, 'user_id' => Arr::random($user_ids)],
+            ['title' => 'Java Professionels', 'description' => 'Vertiefung Java', 'done' => true, 'user_id' => Arr::random($user_ids)],
 
-            ['title' => 'Zugriffe in Laravel', 'description' => 'Authorisierung und Gruppierung in Laravel', 'done' => false],
+            ['title' => 'Zugriffe in Laravel', 'description' => 'Authorisierung und Gruppierung in Laravel', 'done' => false, 'user_id' => Arr::random($user_ids)],
         ];
 
         foreach($tasks as $task)

@@ -31,6 +31,11 @@
                     </button>
                 </form>
             @endauth <!--endtag für auth -->
+            <!--@ funktion geht nur im view  -->
+            @can('view-admin')
+                    <!--route('admin')  geht nur wenn in der web auch das ->name('admin') vergeben wurde -->
+                 <a href="{{ route('admin') }}" class="btn btn-soft btn-secondary"> Admin</a> </span>
+            @endcan
         </div>
     </nav>
 </header>

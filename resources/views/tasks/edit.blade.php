@@ -21,8 +21,9 @@
                     class="textarea w-full {{ $errors->has('description') ? 'textarea-error' : '' }}">{{ old('description', $task->description) }}</textarea>
               <x-error name="description" />
             </fieldset>
-
+            @can('task-view')
             <button type="submit" class="btn btn-primary">Aufgabe ändern</button>
+            @endcan
         </form>
     </div>
 </x-layout>
