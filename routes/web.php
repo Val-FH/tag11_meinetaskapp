@@ -47,6 +47,7 @@ Route::middleware('guest')->group(function() {
 Route::get('/admin', function () {
     // variante Gate::authorized('view-admin')
     return view('admin');
+    // can zeigt wer zugriff auf die seite hat
 })->name('admin')->can('view-admin');
 
 //datenbank tests

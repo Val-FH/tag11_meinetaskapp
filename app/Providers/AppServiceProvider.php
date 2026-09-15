@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Task;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use Iluinate\Auth\Access\Response;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,16 +26,17 @@ class AppServiceProvider extends ServiceProvider
         // Gate::define('view-admin', function(User $user){return true;}
         //return $user->id === 1; hieße nur der user mit der id 1 darf das sehen
 
+        //zugangsberechtigung für die autorisierten bereiche
         Gate::define('task-view',function(User $user, Task $task){
-                return false;
+        return $user->id === $task->user_id? Response::allow() : Response::denyAsNotFound();        
+        //return Response::denyAsNotFound;
         });
 
-        Gate::define('view-admin', function(?User $user ){
+        Gate::define('view-admin', function(User $user ){
             if($user->id === 4){
                 return Response::allow();
             }
-        
-        return Response::denyAsNotFound;
+        return Response::denyAsNotFound();
         });
     }
 }

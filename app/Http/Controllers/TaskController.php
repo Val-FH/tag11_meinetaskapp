@@ -44,7 +44,7 @@ class TaskController extends Controller
         // if(! auth()->check()) {
         //     return redirect()->route('login'); // Redirect für nicht authorisierte user
         // }
-        
+         
         return view('tasks.show', compact('task'));  //return view('tasks.show', ['task' => $task]); 
     }
 
@@ -73,14 +73,14 @@ class TaskController extends Controller
        // weg zu verhindern das andere user an meine aufgaben kommen.
        // abort_if($task->user_id !== auth()->id(), 404);
        //nur user sollen den view sehen
-        Gate::authorize('task-view');
+        Gate::authorize('task-view', $task);
         return view('tasks.edit', compact('task'));
     }
 
     public function update(Request $request, Task $task)
     {
        // abort_if($task->user_id !== auth()->id(), 404);
-        Gate::allow('task-view');
+        Gate::authorize('task-view', $task);
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:50'],
             'description' => ['required', 'string', 'max:500']
@@ -94,7 +94,7 @@ class TaskController extends Controller
     public function destroy(Task $task)
     {
       //  abort_if($task->user_id !== auth()->id(), 404);
-       Gate::authorize('task-view');
+       Gate::authorize('task-view', $task);
         $task->delete();
 
         return redirect()->route('dashboard')->with('success', 'Aufgabe gelöscht');
@@ -105,8 +105,8 @@ class TaskController extends Controller
     public function toggle(Task $task)
     {
         //nur der Ersteller darf seine Aufgabe umschalten
-       // abort_if($task->user_id !== auth()->id(), 403);
-        Gate::authorize('task-view');
+        // abort_if($task->user_id !== auth()->id(), 403);
+        Gate::authorize('task-view', $task);
         $task->done = !$task->done;
         $task->save();
 
